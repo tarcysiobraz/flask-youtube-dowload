@@ -2,7 +2,7 @@ import os
 from urllib.parse import parse_qs, urlparse
 
 from flask import Flask, flash, redirect, render_template, url_for
-from flask_bootstrap import Bootstrap
+from flask_bootstrap import Bootstrap5
 from flask_wtf import FlaskForm
 from flaskwebgui import FlaskUI
 from pytube import YouTube
@@ -11,7 +11,7 @@ from wtforms.validators import DataRequired
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "MmqQwJt4d9"
-bootstrap = Bootstrap(app)
+bootstrap = Bootstrap5(app)
 
 
 class YoutubeLinkForm(FlaskForm):
@@ -26,22 +26,24 @@ def pytubeUi():
         link = form.url.data
         video_id = extract_video_id(link)
         if video_id:
-            folder = os.path.expanduser(
-                "~/Downloads"
-            )  # Obtém o caminho da pasta de downloads do sistema
+            folder = os.path.expanduser("~/Downloads")
             try:
                 Download(video_id, folder)
-                return redirect(url_for("download_complete"))
+                flash(message="Download concluído!", category="success")
             except Exception as e:
-                flash(f"Ocorreu um erro durante o download: {str(e)}", "danger")
+                flash(
+                    category="danger",
+                    message=f"Ocorreu um erro durante o download: {str(e)}",
+                )
         else:
-            flash("Link do YouTube inválido", "danger")
+            flash(message="Link do YouTube inválido", category="danger")
+        return redirect(url_for("pytubeUi"))
     return render_template("index.html", form=form)
 
 
 @app.route("/download_complete")
 def download_complete():
-    flash("Download concluído!", "success")
+    flash("success", "Download concluído!")
     return redirect(url_for("pytubeUi"))
 
 

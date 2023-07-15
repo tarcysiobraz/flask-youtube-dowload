@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/icon.png') }}">
+    <title>Download YT</title>
+    {{ bootstrap.load_css() }}
+</head>
+<body>
+
+{% include 'navbar.html' %}
+
+<div class="container mt-5">
+  {% include 'flash.html' %}
+  <form method="POST" action="/">
+    {{ form.csrf_token }}
+    <div class="form-group">
+      {{ form.url.label(class='form-label') }}
+      {{ form.url(class='form-control') }}
+    </div>
+    <button type="submit" class="btn btn-dark mt-4">Download</button>
+  </form>
+</div>
+
+{{ bootstrap.load_js() }}
+</body>
+</html>
